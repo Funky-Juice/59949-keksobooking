@@ -6,6 +6,7 @@ const ValidationError = require(`../validation-error`);
 const {schema, callback} = require(`./validation`);
 const {getFilteredData, nameCheck, stringToInt, filterValues} = require(`../../../util/util`);
 const Data = require(`../../data/data`);
+const OffersModel = require(`./model`);
 
 const upload = multer({storage: multer.memoryStorage()});
 
@@ -15,7 +16,12 @@ const offersRouter = new Router();
 
 offersRouter.use(bodyParser.json());
 
-offersRouter.get(``, (req, res) => {
+offersRouter.model = OffersModel;
+
+const asyncFunc = (fn) => (req, res, next) => fn(req, res, next).catch(next);
+
+
+offersRouter.get(``, asyncFunc(async (req, res) => {
   let skip = 0;
   let limit = 20;
 
@@ -26,8 +32,8 @@ offersRouter.get(``, (req, res) => {
     limit = parseInt(req.query.limit, 10);
   }
 
-  res.send(getFilteredData(offers, skip, limit));
-});
+  res.send(await getFilteredData(await offersRouter.model.getAllOffers(), skip, limit));
+}));
 
 offersRouter.get(`/:date`, (req, res) => {
   const reqDate = req.params[`date`];
@@ -48,7 +54,7 @@ const formFields = [
 ];
 
 
-offersRouter.post(``, upload.fields(formFields), (req, res) => {
+offersRouter.post(``, upload.fields(formFields), async (req, res) => {
 
   const source = {
     name: nameCheck(req.body.name, Data.NAMES),
@@ -66,7 +72,7 @@ offersRouter.post(``, upload.fields(formFields), (req, res) => {
     preview: req.files.preview
   };
 
-  schema.validate(source, callback);
+  await schema.validate(source, callback);
 
   if (source.avatar) {
     source.avatar.map((it) => {
@@ -78,6 +84,8 @@ offersRouter.post(``, upload.fields(formFields), (req, res) => {
       delete it.buffer;
     });
   }
+
+  await offersRouter.model.create(source);
 
   return res.send(source);
 });
