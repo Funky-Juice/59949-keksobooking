@@ -7,13 +7,13 @@ const ValidationError = require(`../validation-error`);
 Schema.plugin([require(`./assertion`)]);
 
 
-const callback = (err, response) => {
+const callback = async (err, response) => {
   if (err) {
     throw err;
   } else if (response) {
     const errors = [];
 
-    response.errors.map((error) => {
+    await response.errors.map((error) => {
       const obj = {
         'fieldName': error.field,
         'fieldValue': error.value,
