@@ -7,25 +7,6 @@ const ValidationError = require(`../validation-error`);
 Schema.plugin([require(`./assertion`)]);
 
 
-const callback = async (err, response) => {
-  if (err) {
-    throw err;
-  } else if (response) {
-    const errors = [];
-
-    await response.errors.map((error) => {
-      const obj = {
-        'fieldName': error.field,
-        'fieldValue': error.value,
-        'errorMessage': error.message
-      };
-      errors.push(obj);
-    });
-
-    throw new ValidationError(errors);
-  }
-};
-
 const descriptor = {
   type: `object`,
   fields: {
@@ -65,4 +46,32 @@ const descriptor = {
 
 const schema = new Schema(descriptor);
 
-module.exports = {schema, callback};
+const validate = (source) => {
+  return new Promise((resolve, reject) => {
+    let errors = [];
+
+    schema.validate(source, (err, response) => {
+      if (err) {
+        reject(err);
+        return;
+      } else if (response) {
+        errors = response.errors.map((error) => {
+          return {
+            'fieldName': error.field,
+            'fieldValue': error.value,
+            'errorMessage': error.message
+          };
+        });
+      }
+
+      if (errors.length) {
+        reject(new ValidationError(errors));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+
+module.exports = validate;

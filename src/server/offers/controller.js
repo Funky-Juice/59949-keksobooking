@@ -1,6 +1,6 @@
 const OffersModel = require(`./model`);
 const Data = require(`../../data/data`);
-const {schema, callback} = require(`./validation`);
+const validate = require(`./validation`);
 const {getFilteredData, nameCheck, stringToInt, filterValues} = require(`../../../util/util`);
 const {generateEntity} = require(`../../generator/generator`);
 
@@ -57,20 +57,27 @@ module.exports.create = async (req, res) => {
     preview: req.files.preview
   };
 
-  await schema.validate(source, callback);
+  try {
+    await validate(source);
 
-  if (source.avatar) {
-    source.avatar.map((it) => {
-      delete it.buffer;
-    });
+    if (source.avatar) {
+      source.avatar.map((it) => {
+        delete it.buffer;
+      });
+    }
+    if (source.preview) {
+      source.preview.map((it) => {
+        delete it.buffer;
+      });
+    }
+
+    await OffersModel.create(source);
+
+    res.send(source);
+  } catch (err) {
+    console.log(err);
+
+    res.status(400);
+    res.send(err);
   }
-  if (source.preview) {
-    source.preview.map((it) => {
-      delete it.buffer;
-    });
-  }
-
-  await OffersModel.create(source);
-
-  return res.send(source);
 };
