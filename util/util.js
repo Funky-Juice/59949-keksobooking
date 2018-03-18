@@ -36,7 +36,10 @@ const getShuffledArray = (arr) => {
   return newArr;
 };
 
-const getFilteredData = async (cursor, skip, limit) => {
+const getFilteredData = async (cursor, skipVal = 0, limitVal = 20) => {
+  const skip = +skipVal;
+  const limit = +limitVal;
+
   return {
     data: await cursor.skip(skip).limit(limit).toArray(),
     skip,

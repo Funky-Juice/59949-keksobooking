@@ -15,6 +15,7 @@ offersRouter.get(``, offersController.getAll);
 
 offersRouter.get(`/:date`, offersController.getByDate);
 
+
 const formFields = [
   {name: `avatar`, maxCount: 1},
   {name: `preview`, maxCount: 3}

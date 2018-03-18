@@ -2,42 +2,19 @@ const OffersModel = require(`./model`);
 const Data = require(`../../data/data`);
 const validate = require(`./validation`);
 const {getFilteredData, nameCheck, stringToInt, filterValues} = require(`../../../util/util`);
-const {generateEntity} = require(`../../generator/generator`);
-
 
 const asyncFunc = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
-const offers = generateEntity();
-
 
 module.exports.getAll = asyncFunc(async (req, res) => {
-  let skip = 0;
-  let limit = 20;
-
-  if (req.query.skip) {
-    skip = parseInt(req.query.skip, 10);
-  }
-  if (req.query.limit) {
-    limit = parseInt(req.query.limit, 10);
-  }
-
-  res.send(await getFilteredData(await OffersModel.getAllOffers(), skip, limit));
+  res.send(await getFilteredData(await OffersModel.getAllOffers(), req.query.skip, req.query.limit));
 });
-
 
 module.exports.getByDate = async (req, res) => {
   const reqDate = await req.params[`date`];
-  const offer = await offers.find((obj) => obj.date === reqDate);
 
-  if (!offer) {
-    res.status(404);
-    res.set(`Content-Type`, `text/html`);
-    res.end();
-  } else {
-    res.send(offer);
-  }
+  res.send(await getFilteredData(await OffersModel.getOffersByDate(reqDate), req.query.skip, req.query.limit));
 };
-
 
 module.exports.create = async (req, res) => {
 
@@ -54,11 +31,13 @@ module.exports.create = async (req, res) => {
     features: filterValues(req.body.features),
     description: req.body.description,
     avatar: req.files.avatar,
-    preview: req.files.preview
+    preview: req.files.preview,
+    time: new Intl.DateTimeFormat(`ru`).format(new Date()) // TODO: localization
   };
 
   try {
     await validate(source);
+    await OffersModel.createOffer(source);
 
     if (source.avatar) {
       source.avatar.map((it) => {
@@ -70,8 +49,6 @@ module.exports.create = async (req, res) => {
         delete it.buffer;
       });
     }
-
-    await OffersModel.create(source);
 
     res.send(source);
   } catch (err) {
