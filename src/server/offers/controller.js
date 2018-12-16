@@ -13,7 +13,7 @@ module.exports.getAll = asyncFunc(async (req, res) => {
 module.exports.getByDate = async (req, res) => {
   const reqDate = await req.params[`date`];
 
-  res.send(await getFilteredData(await OffersModel.getOffersByDate(reqDate), req.query.skip, req.query.limit));
+  res.send(await getFilteredData(await OffersModel.getOffersByDate(parseInt(reqDate, 10)), req.query.skip, req.query.limit));
 };
 
 module.exports.create = async (req, res) => {
@@ -32,7 +32,7 @@ module.exports.create = async (req, res) => {
     description: req.body.description,
     avatar: req.files.avatar,
     preview: req.files.preview,
-    time: new Intl.DateTimeFormat(`ru`).format(new Date()) // TODO: localization
+    date: new Date().getTime()
   };
 
   try {
