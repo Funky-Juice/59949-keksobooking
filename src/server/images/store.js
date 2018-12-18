@@ -14,6 +14,16 @@ class ImageStore {
     return this._bucket;
   }
 
+  async getImage(filename) {
+    const bucket = await this.getBucket();
+    const results = await (bucket).find({filename}).toArray();
+    const entity = results[0];
+    if (!entity) {
+      return void 0;
+    }
+    return {info: entity, stream: bucket.openDownloadStreamByName(filename)};
+  }
+
   async saveImage(filename, mimetype, stream) {
     const bucket = await this.getBucket();
     return new Promise((success, fail) => {

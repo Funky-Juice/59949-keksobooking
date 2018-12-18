@@ -23,6 +23,8 @@ const formFields = [
 
 offersRouter.post(``, upload.fields(formFields), offersController.create);
 
+offersRouter.get(`/:date/avatar`, offersController.getAvatarByDate);
+
 
 offersRouter.use((exception, req, res, next) => {
   let data = exception;

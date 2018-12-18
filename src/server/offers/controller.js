@@ -13,13 +13,24 @@ module.exports.getAll = asyncFunc(async (req, res) => {
   res.send(await getFilteredData(await OffersModel.getAllOffers(), req.query.skip, req.query.limit));
 });
 
-module.exports.getByDate = async (req, res) => {
+module.exports.getByDate = asyncFunc(async (req, res) => {
   const reqDate = await req.params[`date`];
+  res.send(await OffersModel.getOffersByDate(parseInt(reqDate, 10)));
+});
 
-  res.send(await getFilteredData(await OffersModel.getOffersByDate(parseInt(reqDate, 10)), req.query.skip, req.query.limit));
-};
+module.exports.getAvatarByDate = asyncFunc(async (req, res) => {
+  const reqDate = req.params.date;
+  const offer = await OffersModel.getOffersByDate(parseInt(reqDate, 10));
 
-module.exports.create = async (req, res) => {
+  const {info, stream} = await imageStore.getImage(offer.avatar.filename);
+
+  res.set(`content-type`, info.contentType);
+  res.set(`content-length`, info.length);
+  res.status(200);
+  stream.pipe(res);
+});
+
+module.exports.create = asyncFunc(async (req, res) => {
 
   const source = {
     name: nameCheck(req.body.name, Data.NAMES),
@@ -45,7 +56,7 @@ module.exports.create = async (req, res) => {
 
     if (avatar) {
       const avatarInfo = {
-        filename: `${source.date}/avatar`,
+        filename: `api/offers/${source.date}/avatar`,
         mimetype: avatar.mimetype
       };
 
@@ -62,4 +73,4 @@ module.exports.create = async (req, res) => {
     res.status(400);
     res.send(err);
   }
-};
+});
