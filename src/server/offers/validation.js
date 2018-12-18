@@ -53,13 +53,12 @@ const validate = (source) => {
     schema.validate(source, (err, response) => {
       if (err) {
         reject(err);
-        return;
       } else if (response) {
         errors = response.errors.map((error) => {
           return {
-            'fieldName': error.field,
-            'fieldValue': error.value,
-            'errorMessage': error.message
+            fieldName: error.field,
+            fieldValue: error.value,
+            errorMessage: error.message
           };
         });
       }

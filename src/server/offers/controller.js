@@ -1,6 +1,9 @@
 const OffersModel = require(`./model`);
 const Data = require(`../../data/data`);
 const validate = require(`./validation`);
+const createStreamFromBuffer = require(`./buffer-to-stream`);
+const imageStore = require(`../images/store`);
+
 const {getFilteredData, nameCheck, stringToInt, filterValues} = require(`../../../util/util`);
 
 const asyncFunc = (fn) => (req, res, next) => fn(req, res, next).catch(next);
@@ -35,22 +38,24 @@ module.exports.create = async (req, res) => {
     date: new Date().getTime()
   };
 
+  const avatar = (req.files.avatar ? req.files.avatar[0] : null);
+
   try {
     await validate(source);
+
+    if (avatar) {
+      const avatarInfo = {
+        filename: `${source.date}/avatar`,
+        mimetype: avatar.mimetype
+      };
+
+      await imageStore.saveImage(avatarInfo.filename, avatarInfo.mimetype, createStreamFromBuffer(avatar.buffer));
+      source.avatar = avatarInfo;
+    }
+
     await OffersModel.createOffer(source);
-
-    if (source.avatar) {
-      source.avatar.map((it) => {
-        delete it.buffer;
-      });
-    }
-    if (source.preview) {
-      source.preview.map((it) => {
-        delete it.buffer;
-      });
-    }
-
     res.send(source);
+
   } catch (err) {
     console.log(err);
 
