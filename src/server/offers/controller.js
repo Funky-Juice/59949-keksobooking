@@ -49,6 +49,13 @@ module.exports.create = asyncFunc(async (req, res) => {
     date: new Date().getTime()
   };
 
+  let coordinates = source.address.split(`,`);
+
+  source.location = {
+    x: stringToInt(coordinates[0]),
+    y: stringToInt(coordinates[1])
+  };
+
   const avatar = (req.files.avatar ? req.files.avatar[0] : null);
 
   try {
