@@ -5,17 +5,26 @@ const createStreamFromBuffer = require(`./buffer-to-stream`);
 const imageStore = require(`../images/store`);
 
 const {getFilteredData, nameCheck, stringToInt, filterValues} = require(`../../../util/util`);
+const {formatOfferData} = require(`../../../util/service`);
 
 const asyncFunc = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 
 module.exports.getAll = asyncFunc(async (req, res) => {
-  res.send(await getFilteredData(await OffersModel.getAllOffers(), req.query.skip, req.query.limit));
+  let offers = await getFilteredData(await OffersModel.getAllOffers(), req.query.skip, req.query.limit);
+
+  offers.data = offers.data.map((obj) => {
+    return formatOfferData(obj);
+  });
+
+  res.send(offers);
 });
 
 module.exports.getByDate = asyncFunc(async (req, res) => {
   const reqDate = await req.params[`date`];
-  res.send(await OffersModel.getOffersByDate(parseInt(reqDate, 10)));
+  const offer = await OffersModel.getOfferByDate(parseInt(reqDate, 10));
+
+  res.send(formatOfferData(offer));
 });
 
 module.exports.getAvatarByDate = asyncFunc(async (req, res) => {
