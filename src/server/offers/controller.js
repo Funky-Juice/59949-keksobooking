@@ -54,7 +54,7 @@ module.exports.create = asyncFunc(async (req, res) => {
     features: filterValues(req.body.features),
     description: req.body.description,
     avatar: req.files.avatar,
-    preview: req.files.preview,
+    photo: req.files.photo,
     date: new Date().getTime()
   };
 
@@ -65,7 +65,7 @@ module.exports.create = asyncFunc(async (req, res) => {
     y: stringToInt(coordinates[1])
   };
 
-  const avatar = (req.files.avatar ? req.files.avatar[0] : null);
+  const avatar = (source.avatar ? source.avatar[0] : null);
 
   try {
     await validate(source);
@@ -78,6 +78,22 @@ module.exports.create = asyncFunc(async (req, res) => {
 
       await imageStore.saveImage(avatarInfo.filename, avatarInfo.mimetype, createStreamFromBuffer(avatar.buffer));
       source.avatar = avatarInfo.filename;
+    }
+
+    if (source.photo) {
+      let photos = [];
+
+      source.photo.forEach(async (obj, i) => {
+        const photoInfo = {
+          filename: `api/offers/${source.date}/photo/${i}`,
+          mimetype: obj.mimetype
+        };
+
+        await imageStore.saveImage(photoInfo.filename, photoInfo.mimetype, createStreamFromBuffer(obj.buffer))
+            .then(photos.push(photoInfo.filename));
+      });
+
+      source.photo = photos;
     }
 
     await OffersModel.createOffer(source);

@@ -9,7 +9,7 @@ class ImageStore {
     }
     const dBase = await db();
     if (!this._bucket) {
-      this._bucket = new mongodb.GridFSBucket(dBase, {bucketName: `avatars`});
+      this._bucket = new mongodb.GridFSBucket(dBase, {bucketName: `images`});
     }
     return this._bucket;
   }

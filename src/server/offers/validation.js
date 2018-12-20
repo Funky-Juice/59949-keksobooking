@@ -40,7 +40,7 @@ const descriptor = {
       cb();
     },
     avatar: {type: `isImage`, required: false},
-    preview: {type: `isImage`, required: false}
+    photo: {type: `isImage`, required: false}
   }
 };
 

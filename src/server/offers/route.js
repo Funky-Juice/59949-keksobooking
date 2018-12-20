@@ -18,7 +18,7 @@ offersRouter.get(`/:date`, offersController.getByDate);
 
 const formFields = [
   {name: `avatar`, maxCount: 1},
-  {name: `preview`, maxCount: 3}
+  {name: `photo`, maxCount: 3}
 ];
 
 offersRouter.post(``, upload.fields(formFields), offersController.create);
