@@ -15,13 +15,13 @@ const descriptor = {
     type: {type: `enum`, required: true, list: Data.TYPE},
     address: {type: `string`, required: true, min: 5, max: 100},
     description: {type: `string`, required: false, min: 5, max: 100},
-    timein: {
+    checkin: {
       type: `string`,
       required: true,
       pattern: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/,
       message: `time format should be HH:mm`
     },
-    timeout: {
+    checkout: {
       type: `string`,
       required: true,
       pattern: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/,

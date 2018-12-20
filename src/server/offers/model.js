@@ -17,7 +17,7 @@ class OffersModel {
     return (await this.collection).find();
   }
 
-  async getOffersByDate(createDate) {
+  async getOfferByDate(createDate) {
     return (await this.collection).findOne({date: createDate});
   }
 

@@ -20,9 +20,9 @@ module.exports.getByDate = asyncFunc(async (req, res) => {
 
 module.exports.getAvatarByDate = asyncFunc(async (req, res) => {
   const reqDate = req.params.date;
-  const offer = await OffersModel.getOffersByDate(parseInt(reqDate, 10));
+  const offer = await OffersModel.getOfferByDate(parseInt(reqDate, 10));
 
-  const {info, stream} = await imageStore.getImage(offer.avatar.filename);
+  const {info, stream} = await imageStore.getImage(offer.avatar);
 
   res.set(`content-type`, info.contentType);
   res.set(`content-length`, info.length);
@@ -38,8 +38,8 @@ module.exports.create = asyncFunc(async (req, res) => {
     type: req.body.type,
     price: stringToInt(req.body.price),
     address: req.body.address,
-    timein: req.body.timein,
-    timeout: req.body.timeout,
+    checkin: req.body.checkin,
+    checkout: req.body.checkout,
     rooms: stringToInt(req.body.rooms),
     guests: stringToInt(req.body.guests),
     features: filterValues(req.body.features),
@@ -68,7 +68,7 @@ module.exports.create = asyncFunc(async (req, res) => {
       };
 
       await imageStore.saveImage(avatarInfo.filename, avatarInfo.mimetype, createStreamFromBuffer(avatar.buffer));
-      source.avatar = avatarInfo;
+      source.avatar = avatarInfo.filename;
     }
 
     await OffersModel.createOffer(source);
