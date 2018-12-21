@@ -29,9 +29,22 @@ module.exports.getByDate = asyncFunc(async (req, res) => {
 
 module.exports.getAvatarByDate = asyncFunc(async (req, res) => {
   const reqDate = req.params.date;
-  const offer = await OffersModel.getOfferByDate(parseInt(reqDate, 10));
 
+  const offer = await OffersModel.getOfferByDate(stringToInt(reqDate));
   const {info, stream} = await imageStore.getImage(offer.avatar);
+
+  res.set(`content-type`, info.contentType);
+  res.set(`content-length`, info.length);
+  res.status(200);
+  stream.pipe(res);
+});
+
+module.exports.getPhotoByDate = asyncFunc(async (req, res) => {
+  const reqDate = req.params.date;
+  const photoIndex = req.params.index;
+
+  const offer = await OffersModel.getOfferByDate(stringToInt(reqDate));
+  const {info, stream} = await imageStore.getImage(offer.photo[photoIndex]);
 
   res.set(`content-type`, info.contentType);
   res.set(`content-length`, info.length);
