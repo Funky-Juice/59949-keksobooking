@@ -1,19 +1,22 @@
 const {Router} = require(`express`);
 const bodyParser = require(`body-parser`);
 const multer = require(`multer`);
+
 const ValidationError = require(`../validation-error`);
-const offersController = require(`./controller`);
+const OffersController = require(`./controller`);
+
+const ImagesStore = require(`../images/store`);
+const OffersModel = require(`./model`);
 
 const upload = multer({storage: multer.memoryStorage()});
 
 const offersRouter = new Router();
 
+const controller = new OffersController(OffersModel, ImagesStore);
+
 offersRouter.use(bodyParser.json());
 
-
-offersRouter.get(``, offersController.getAll);
-
-offersRouter.get(`/:date`, offersController.getByDate);
+const asyncMiddleware = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 
 const formFields = [
@@ -21,11 +24,15 @@ const formFields = [
   {name: `photo`, maxCount: 3}
 ];
 
-offersRouter.post(``, upload.fields(formFields), offersController.create);
+offersRouter.post(``, upload.fields(formFields), asyncMiddleware(controller.createOffer()));
 
-offersRouter.get(`/:date/avatar`, offersController.getAvatarByDate);
+offersRouter.get(``, asyncMiddleware(controller.getAll()));
 
-offersRouter.get(`/:date/photo/:index`, offersController.getPhotoByDate);
+offersRouter.get(`/:date`, asyncMiddleware(controller.getByDate()));
+
+offersRouter.get(`/:date/avatar`, asyncMiddleware(controller.getAvatarByDate()));
+
+offersRouter.get(`/:date/photo/:index`, asyncMiddleware(controller.getPhotoByDate()));
 
 offersRouter.use((exception, req, res, next) => {
   let data = exception;
