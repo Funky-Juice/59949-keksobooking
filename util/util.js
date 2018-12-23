@@ -70,8 +70,11 @@ const nameCheck = (value, namesArr) => {
   return value;
 };
 
+const asyncMiddleware = (fn) => (req, res, next) => fn(req, res, next).catch(next);
+
 
 module.exports = {
+  asyncMiddleware,
   getRandomPic,
   getRandomInt,
   getRandomDate,
