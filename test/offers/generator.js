@@ -1,4 +1,4 @@
-const Data = require(`../data/data`);
+const Data = require(`../../src/data/data`);
 const util = require(`../../util/util`);
 
 
@@ -27,7 +27,7 @@ const dataTemplate = () => {
       'x': coordinateX,
       'y': coordinateY
     },
-    'date': util.getRandomDate()
+    'date': 1545680895080
   };
 };
 

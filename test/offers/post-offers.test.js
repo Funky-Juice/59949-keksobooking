@@ -1,5 +1,5 @@
 const request = require(`supertest`);
-const {app} = require(`../src/server/server`);
+const {app} = require(`./src/server/server`);
 
 
 describe(`POST /api/offers`, function () {

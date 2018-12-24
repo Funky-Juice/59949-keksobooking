@@ -7,7 +7,7 @@ const {URL} = require(`url`);
 
 const generate = require(`../src/cli/generate.js`);
 const Data = require(`../src/data/data.js`);
-const {generateEntity} = require(`../src/generator/generator`);
+const {generateEntity} = require(`./offers/generator`);
 
 describe(`Generate JSON file`, () => {
   it(`should create json file`, () => {
