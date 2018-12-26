@@ -1,17 +1,38 @@
 const {generateEntity} = require(`./generator`);
 
-const mockData = generateEntity(1);
+const offers = generateEntity();
 
+class Cursor {
+  constructor(data) {
+    this.data = data;
+  }
+
+  skip(count) {
+    return new Cursor(this.data.slice(count));
+  }
+
+  limit(count) {
+    return new Cursor(this.data.slice(0, count));
+  }
+
+  async count() {
+    return this.data.length;
+  }
+
+  async toArray() {
+    return this.data;
+  }
+}
 
 class OffersModelMock {
   constructor() {}
 
   async getAllOffers() {
-    return mockData;
+    return new Cursor(offers);
   }
 
   async getOfferByDate(createDate) {
-    return mockData.find((it) => {
+    return offers.find((it) => {
       it.date = createDate;
     });
   }
