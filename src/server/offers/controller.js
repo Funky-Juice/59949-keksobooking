@@ -1,5 +1,6 @@
 const Data = require(`../../data/data`);
 const validate = require(`./validation`);
+const NotFoundError = require(`../error/not-found-error.js`);
 const createStreamFromBuffer = require(`./buffer-to-stream`);
 
 const {getFilteredData, nameCheck, stringToInt, filterValues} = require(`../../../util/util`);
@@ -28,6 +29,9 @@ class OffersController {
       const reqDate = await req.params[`date`];
       const offer = await this.model.getOfferByDate(parseInt(reqDate, 10));
 
+      if (!offer) {
+        throw new NotFoundError(`Offer with date ${reqDate} not found`);
+      }
       res.send(formatOfferData(offer));
     };
   }
@@ -35,8 +39,11 @@ class OffersController {
   getAvatarByDate() {
     return async (req, res) => {
       const reqDate = req.params.date;
-
       const offer = await this.model.getOfferByDate(stringToInt(reqDate));
+
+      if (!offer) {
+        throw new NotFoundError(`Avatar was not found`);
+      }
       const {info, stream} = await this.imageStore.getImage(offer.avatar);
 
       res.set(`content-type`, info.contentType);
@@ -50,14 +57,22 @@ class OffersController {
     return async (req, res) => {
       const reqDate = req.params.date;
       const photoIndex = req.params.index;
-
       const offer = await this.model.getOfferByDate(stringToInt(reqDate));
-      const {info, stream} = await this.imageStore.getImage(offer.photo[photoIndex]);
 
-      res.set(`content-type`, info.contentType);
-      res.set(`content-length`, info.length);
+      if (!offer) {
+        throw new NotFoundError(`Photo was not found`);
+      }
+
+      const file = await this.imageStore.getImage(offer.photo[photoIndex]);
+
+      if (!file) {
+        throw new NotFoundError(`Photo was not found`);
+      }
+
+      res.set(`content-type`, file.info.contentType);
+      res.set(`content-length`, file.info.length);
       res.status(200);
-      stream.pipe(res);
+      file.stream.pipe(res);
     };
   }
 

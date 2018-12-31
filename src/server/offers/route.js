@@ -3,8 +3,8 @@ const bodyParser = require(`body-parser`);
 const multer = require(`multer`);
 
 const {asyncMiddleware} = require(`../../../util/util`);
+const dataRenderer = require(`../../../util/data-renderer`);
 
-const ValidationError = require(`../validation-error`);
 const OffersController = require(`./controller`);
 
 const ImagesStore = require(`../images/store`);
@@ -37,11 +37,7 @@ const initRouter = (model = OffersModel, imgStore = ImagesStore) => {
   offersRouter.post(``, upload.fields(formFields), asyncMiddleware(controller.createOffer()));
 
   offersRouter.use((exception, req, res, next) => {
-    let data = exception;
-    if (exception instanceof ValidationError) {
-      data = exception.errors;
-    }
-    res.status(400).send(data);
+    dataRenderer.renderException(req, res, exception);
     next();
   });
 
