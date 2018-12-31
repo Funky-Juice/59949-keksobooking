@@ -25,15 +25,17 @@ class Cursor {
 }
 
 class OffersModelMock {
-  constructor() {}
+  constructor() {
+    this.data = offers;
+  }
 
   async getAllOffers() {
-    return new Cursor(offers);
+    return new Cursor(this.data);
   }
 
   async getOfferByDate(createDate) {
-    return offers.find((it) => {
-      it.date = createDate;
+    return this.data.find((it) => {
+      return it.date === createDate;
     });
   }
 

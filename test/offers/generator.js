@@ -23,7 +23,7 @@ const dataTemplate = () => {
       'x': coordinateX,
       'y': coordinateY
     },
-    'date': 1545680895080
+    'date': new Date().getTime()
   };
 };
 
