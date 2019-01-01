@@ -2,7 +2,7 @@
 class ImagesStoreMock {
   async get() {}
 
-  async save() {}
+  async saveImage() {}
 }
 
 module.exports = new ImagesStoreMock();

@@ -3,6 +3,7 @@ require(`async-validate/plugin/all`);
 const Data = require(`../../data/data`);
 const Schema = require(`async-validate`);
 const ValidationError = require(`../validation-error`);
+const {stringToInt} = require(`../../../util/util`);
 
 Schema.plugin([require(`./assertion`)]);
 
@@ -13,7 +14,19 @@ const descriptor = {
     name: {type: `string`, required: true, min: 3, max: 20},
     title: {type: `string`, required: true, min: 30, max: 140},
     type: {type: `enum`, required: true, list: Data.TYPE},
-    address: {type: `string`, required: true, min: 5, max: 100},
+    address(cb) {
+      if (this.value) {
+        const coordinates = this.value.split(`,`);
+        if (coordinates.length !== 2) {
+          this.raise(`${this.field} format: xxx, yyy`);
+        } else if (typeof stringToInt(coordinates[0]) !== `number` || typeof stringToInt(coordinates[1]) !== `number`) {
+          this.raise(`values must be a numbers`);
+        }
+      } else {
+        this.raise(`${this.field} is required`);
+      }
+      cb();
+    },
     description: {type: `string`, required: false, min: 5, max: 100},
     checkin: {
       type: `string`,

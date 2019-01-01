@@ -96,17 +96,17 @@ class OffersController {
         date: new Date().getTime()
       };
 
-      let coordinates = source.address.split(`,`);
-
-      source.location = {
-        x: stringToInt(coordinates[0]),
-        y: stringToInt(coordinates[1])
-      };
-
-      const avatar = (source.avatar ? source.avatar[0] : null);
-
       try {
         await validate(source);
+
+        const coordinates = source.address.split(`,`);
+
+        source.location = {
+          x: stringToInt(coordinates[0]),
+          y: stringToInt(coordinates[1])
+        };
+
+        const avatar = (source.avatar ? source.avatar[0] : null);
 
         if (avatar) {
           const avatarInfo = {

@@ -27,7 +27,7 @@ const dataTemplate = () => {
   };
 };
 
-const generateEntity = (objectsCount = 7) => {
+const generateEntity = (objectsCount = 1) => {
   const data = [];
 
   for (let i = 0; i < objectsCount; i++) {
