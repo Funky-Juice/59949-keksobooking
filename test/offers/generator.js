@@ -1,5 +1,5 @@
 const Data = require(`../../src/data/data`);
-const util = require(`../../util/util`);
+const util = require(`../../src/util/util`);
 
 
 const dataTemplate = () => {

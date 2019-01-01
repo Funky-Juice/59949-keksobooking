@@ -1,10 +1,10 @@
 const Data = require(`../../data/data`);
 const validate = require(`./validation`);
 const NotFoundError = require(`../error/not-found-error.js`);
-const createStreamFromBuffer = require(`./buffer-to-stream`);
+const createStreamFromBuffer = require(`../../util/buffer-to-stream`);
 
-const {getFilteredData, nameCheck, stringToInt, filterValues} = require(`../../../util/util`);
-const {formatOfferData} = require(`../../../util/service`);
+const {getFilteredData, nameCheck, stringToInt, filterValues} = require(`../../util/util`);
+const {formatOfferData} = require(`../../util/service`);
 
 class OffersController {
   constructor(model, imageStore) {

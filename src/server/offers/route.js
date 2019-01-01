@@ -1,9 +1,8 @@
 const {Router} = require(`express`);
 const bodyParser = require(`body-parser`);
 const multer = require(`multer`);
-
-const {asyncMiddleware} = require(`../../../util/util`);
-const dataRenderer = require(`../../../util/data-renderer`);
+const {asyncMiddleware} = require(`../../util/util`);
+const dataRenderer = require(`../../util/data-renderer`);
 
 const OffersController = require(`./controller`);
 

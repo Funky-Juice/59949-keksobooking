@@ -2,10 +2,10 @@ require(`async-validate/plugin/all`);
 
 const Data = require(`../../data/data`);
 const Schema = require(`async-validate`);
-const ValidationError = require(`../validation-error`);
-const {stringToInt} = require(`../../../util/util`);
+const ValidationError = require(`../error/validation-error`);
+const {stringToInt} = require(`../../util/util`);
 
-Schema.plugin([require(`./assertion`)]);
+Schema.plugin([require(`../../util/assertion`)]);
 
 
 const descriptor = {

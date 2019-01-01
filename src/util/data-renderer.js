@@ -1,5 +1,5 @@
 const util = require(`util`);
-const ValidationError = require(`../src/server/validation-error`);
+const ValidationError = require(`../server/error/validation-error`);
 
 const SUCCESS_CODE = 200;
 const BAD_DATA_CODE = 400;

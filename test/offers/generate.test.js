@@ -5,10 +5,10 @@ const access = promisify(fs.access);
 const unlink = promisify(fs.unlink);
 const {URL} = require(`url`);
 
-const generate = require(`../src/cli/generate.js`);
-const Data = require(`../src/data/data.js`);
-const {generateEntity} = require(`./offers/generator`);
-const {formatOfferData} = require(`../util/service`);
+const generate = require(`../../src/cli/generate.js`);
+const Data = require(`../../src/data/data.js`);
+const {generateEntity} = require(`./generator`);
+const {formatOfferData} = require(`../../src/util/service`);
 
 describe(`Generate JSON file`, () => {
   it(`should create json file`, () => {
