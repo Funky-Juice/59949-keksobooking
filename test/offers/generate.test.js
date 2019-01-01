@@ -5,9 +5,10 @@ const access = promisify(fs.access);
 const unlink = promisify(fs.unlink);
 const {URL} = require(`url`);
 
-const generate = require(`../src/cli/generate.js`);
-const Data = require(`../src/data/data.js`);
-const {generateEntity} = require(`../src/generator/generator`);
+const generate = require(`../../src/cli/generate.js`);
+const Data = require(`../../src/data/data.js`);
+const {generateEntity} = require(`./generator`);
+const {formatOfferData} = require(`../../src/util/service`);
 
 describe(`Generate JSON file`, () => {
   it(`should create json file`, () => {
@@ -21,7 +22,7 @@ describe(`Generate JSON file`, () => {
 describe(`JSON author object check`, () => {
   let data;
   before(() => {
-    data = generateEntity()[0];
+    data = formatOfferData(generateEntity()[0]);
   });
 
   it(`should exist`, () => {
@@ -58,7 +59,7 @@ describe(`JSON author object check`, () => {
 describe(`JSON offer object check`, () => {
   let data;
   before(() => {
-    data = generateEntity()[0];
+    data = formatOfferData(generateEntity()[0]);
   });
 
   it(`should exist`, () => {
@@ -267,29 +268,29 @@ describe(`JSON offer object check`, () => {
       assert.equal(typeof data.offer.description, `string`);
     });
 
-    it(`string value must be empty`, () => {
-      assert.equal(data.offer.description.length, 0);
+    it(`should not be empty`, () => {
+      assert.notEqual(data.offer.description.length, 0);
     });
   });
 
   describe(`offer.photos field check`, () => {
     it(`should exist`, () => {
-      assert.notEqual(typeof data.offer.photos, `undefined`);
+      assert.notEqual(typeof data.offer.photo, `undefined`);
     });
 
     it(`must be an array`, () => {
-      assert.equal(Array.isArray(data.offer.photos), true);
+      assert.equal(Array.isArray(data.offer.photo), true);
     });
 
     it(`should not be empty`, () => {
-      assert.notEqual(data.offer.photos.length, 0);
+      assert.notEqual(data.offer.photo.length, 0);
     });
 
     it(`must contain only photos`, () => {
       function comparison(elem) {
         return Data.PHOTOS.includes(elem);
       }
-      assert.equal(data.offer.photos.every(comparison), true);
+      assert.equal(data.offer.photo.every(comparison), true);
     });
   });
 });
@@ -297,7 +298,7 @@ describe(`JSON offer object check`, () => {
 describe(`JSON location object check`, () => {
   let data;
   before(() => {
-    data = generateEntity()[0];
+    data = formatOfferData(generateEntity()[0]);
   });
 
   it(`should exist`, () => {
@@ -338,7 +339,7 @@ describe(`JSON location object check`, () => {
 describe(`JSON date field check`, () => {
   let data;
   before(() => {
-    data = generateEntity()[0];
+    data = formatOfferData(generateEntity()[0]);
   });
 
   describe(`date field check`, () => {
@@ -348,14 +349,6 @@ describe(`JSON date field check`, () => {
 
     it(`should have a num value`, () => {
       assert.equal(typeof data.date, `number`);
-    });
-
-    it(`should have a value >= ${(Math.floor(Date.now() / 1000)) - (60 * 60 * 24 * 7)} and <= ${Math.floor(Date.now() / 1000)}`, () => {
-      const dateNow = Math.floor(Date.now() / 1000);
-      const week = 60 * 60 * 24 * 7;
-
-      let val = (data.date >= (dateNow - week) && data.date <= dateNow);
-      assert.equal(val, true);
     });
   });
 });

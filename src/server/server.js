@@ -5,7 +5,7 @@ const app = express();
 
 app.use(express.static(`static`));
 
-app.use(`/api/offers`, offersRouter);
+app.use(`/api/offers`, offersRouter());
 
 
 const PORT = 3000;

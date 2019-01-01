@@ -36,12 +36,15 @@ const getShuffledArray = (arr) => {
   return newArr;
 };
 
-const getFilteredData = (data, skip, limit) => {
+const getFilteredData = async (cursor, skipVal = 0, limitVal = 20) => {
+  const skip = +skipVal;
+  const limit = +limitVal;
+
   return {
-    data: data.slice(skip, skip + limit),
+    data: await cursor.skip(skip).limit(limit).toArray(),
     skip,
     limit,
-    total: data.length
+    total: await cursor.count()
   };
 };
 
@@ -67,8 +70,11 @@ const nameCheck = (value, namesArr) => {
   return value;
 };
 
+const asyncMiddleware = (fn) => (req, res, next) => fn(req, res, next).catch(next);
+
 
 module.exports = {
+  asyncMiddleware,
   getRandomPic,
   getRandomInt,
   getRandomDate,
