@@ -7,6 +7,7 @@ const dataTemplate = () => {
   const coordinateY = util.getRandomInt(150, 500);
 
   return {
+    'name': util.getRandomFromArr(Data.NAMES),
     'avatar': util.getRandomPic(),
     'title': util.getRandomFromArr(Data.TITLE),
     'address': `${coordinateX}, ${coordinateY}`,

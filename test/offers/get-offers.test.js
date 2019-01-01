@@ -23,8 +23,8 @@ describe(`GET /api/offers`, function () {
         .expect(200)
         .then((response) => {
           const dataObj = response.body;
-          assert.equal(dataObj.total, 7);
-          assert.equal(dataObj.data.length, 7);
+          assert.equal(dataObj.total, 1);
+          assert.equal(dataObj.data.length, 1);
           assert.equal(Array.isArray(dataObj.data), true);
           assert.equal(Object.keys(dataObj.data[0]).length, 4);
         });
