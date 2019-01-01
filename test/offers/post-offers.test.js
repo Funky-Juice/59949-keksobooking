@@ -908,4 +908,68 @@ describe(`POST /api/offers`, function () {
           });
     });
   });
+
+  describe(`"avatar" field`, function () {
+
+    it(`should fail if files > 1`, function () {
+      return request(app)
+          .post(`/api/offers`)
+          .set(`Accept`, `multipart/form-data`)
+          .field(`name`, `Keks`)
+          .field(`title`, `Маленькая квартирка рядом с парком`)
+          .field(`type`, `flat`)
+          .field(`price`, `30000`)
+          .field(`address`, `127, 282`)
+          .field(`checkin`, `12:00`)
+          .field(`checkout`, `13:00`)
+          .field(`rooms`, `1`)
+          .field(`guests`, `1`)
+          .field(`features`, `dishwasher`)
+          .field(`features`, `conditioner`)
+          .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
+          .attach(`avatar`, `test/img/keks.png`)
+          .attach(`avatar`, `test/img/keks.png`)
+          .expect(`Content-Type`, /json/)
+          .expect(400, {
+            errors: [{
+              fieldName: `avatar`,
+              fieldValue: 2,
+              errorMessage: `one file only`
+            }]
+          });
+    });
+  });
+
+  describe(`"photo" field`, function () {
+
+    it(`should fail if files > 3`, function () {
+      return request(app)
+          .post(`/api/offers`)
+          .set(`Accept`, `multipart/form-data`)
+          .field(`name`, `Keks`)
+          .field(`title`, `Маленькая квартирка рядом с парком`)
+          .field(`type`, `flat`)
+          .field(`price`, `30000`)
+          .field(`address`, `127, 282`)
+          .field(`checkin`, `12:00`)
+          .field(`checkout`, `13:00`)
+          .field(`rooms`, `1`)
+          .field(`guests`, `1`)
+          .field(`features`, `dishwasher`)
+          .field(`features`, `conditioner`)
+          .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
+          .attach(`photo`, `test/img/keks.png`)
+          .attach(`photo`, `test/img/keks.png`)
+          .attach(`photo`, `test/img/keks.png`)
+          .attach(`photo`, `test/img/keks.png`)
+          .expect(`Content-Type`, /json/)
+          .expect(400, {
+            errors: [{
+              fieldName: `photo`,
+              fieldValue: 4,
+              errorMessage: `three photos maximum`
+            }]
+          });
+    });
+  });
 });
