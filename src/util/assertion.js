@@ -1,9 +1,18 @@
 module.exports = function () {
 
   this.main.isImage = function (cb) {
-    if (this.value) {
+    const file = this.value;
+    if (file) {
 
-      this.value.map((obj) => {
+      if (this.field === `avatar` && file.length > 1) {
+        this.value = this.value.length;
+        this.raise(`one file only`);
+      } else if (this.field === `photo` && file.length > 3) {
+        this.value = this.value.length;
+        this.raise(`three photos maximum`);
+      }
+
+      file.map((obj) => {
         const fileExt = obj.mimetype;
         const fileSize = obj.size;
 

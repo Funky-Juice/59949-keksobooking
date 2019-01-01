@@ -21,8 +21,8 @@ const initRouter = (model = OffersModel, imgStore = ImagesStore) => {
   const controller = new OffersController(model, imgStore);
 
   const formFields = [
-    {name: `avatar`, maxCount: 1},
-    {name: `photo`, maxCount: 3}
+    {name: `avatar`},
+    {name: `photo`}
   ];
 
   offersRouter.get(``, asyncMiddleware(controller.getAll()));
