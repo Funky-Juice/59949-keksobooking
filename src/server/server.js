@@ -1,5 +1,6 @@
 const express = require(`express`);
 const offersRouter = require(`./offers/route`);
+const logger = require(`../logger`);
 
 const app = express();
 
@@ -16,7 +17,7 @@ module.exports = {
   description: `runs local server`,
   execute(port) {
     app.listen(port || PORT, HOSTNAME, () => {
-      console.log(`server started at http://${HOSTNAME}:${port || PORT}/`);
+      logger.info(`server started at http://${HOSTNAME}:${port || PORT}/`);
     });
   },
   app

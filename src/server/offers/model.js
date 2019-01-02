@@ -1,7 +1,9 @@
 const db = require(`../../database/database`);
+const logger = require(`../../logger`);
 
 const setupCollection = async () => {
-  const dBase = await db();
+  const dBase = await db;
+
   const collection = dBase.collection(`offers`);
   collection.createIndex({name: -1}, {unique: true});
 
@@ -26,4 +28,7 @@ class OffersModel {
   }
 }
 
-module.exports = new OffersModel(setupCollection().catch((err) => console.log(`"Offers" collection error: ` + err)));
+module.exports = new OffersModel(setupCollection().catch((err) => {
+  logger.error(`"Offers" collection error: ` + err);
+  process.exit(1);
+}));

@@ -1,4 +1,5 @@
 const Data = require(`../../data/data`);
+const logger = require(`../../logger`);
 const validate = require(`./validation`);
 const NotFoundError = require(`../error/not-found-error.js`);
 const createStreamFromBuffer = require(`../../util/buffer-to-stream`);
@@ -78,6 +79,7 @@ class OffersController {
 
   createOffer() {
     return async (req, res) => {
+      logger.info(`Create offer req.body: `, req.body);
 
       const source = {
         name: nameCheck(req.body.name, Data.NAMES),
@@ -138,7 +140,7 @@ class OffersController {
         res.send(source);
 
       } catch (err) {
-        console.log(err);
+        logger.error(`Create offer`, err);
 
         res.status(400);
         res.send(err);
