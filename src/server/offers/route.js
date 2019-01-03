@@ -15,7 +15,6 @@ const offersRouter = new Router();
 
 offersRouter.use(bodyParser.json());
 
-
 const initRouter = (model = OffersModel, imgStore = ImagesStore) => {
 
   const controller = new OffersController(model, imgStore);
@@ -36,7 +35,7 @@ const initRouter = (model = OffersModel, imgStore = ImagesStore) => {
   offersRouter.post(``, upload.fields(formFields), asyncMiddleware(controller.createOffer()));
 
   offersRouter.use((exception, req, res, next) => {
-    dataRenderer.renderException(req, res, exception);
+    dataRenderer.renderDataError(req, res, exception);
     next();
   });
 

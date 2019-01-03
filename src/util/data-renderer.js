@@ -1,4 +1,5 @@
 const util = require(`util`);
+const {MongoError} = require(`mongodb`);
 const ValidationError = require(`../server/error/validation-error`);
 
 const SUCCESS_CODE = 200;
@@ -58,11 +59,21 @@ const render = (req, res, data, success) => {
 
 module.exports = {
   renderDataSuccess: (req, res, data) => render(req, res, data, true),
-  renderDataError: (req, res, data) => render(req, res, data, false),
-  renderException: (req, res, exception) => {
+  renderDataError: (req, res, exception) => {
     let data = exception;
     if (exception instanceof ValidationError) {
       data = exception.errors;
+    } else if (exception instanceof MongoError) {
+      data = {};
+      switch (exception.code) {
+        case 11000:
+          data.code = 400;
+          data.errorMessage = `Duplicate name field`;
+          break;
+        default:
+          data.code = 501;
+          data.errorMessage = exception.message;
+      }
     }
     render(req, res, data, false);
   }

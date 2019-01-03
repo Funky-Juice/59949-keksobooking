@@ -1,6 +1,7 @@
 const Data = require(`../../data/data`);
 const logger = require(`../../logger`);
 const validate = require(`./validation`);
+const dataRenderer = require(`../../util/data-renderer`);
 const NotFoundError = require(`../error/not-found-error.js`);
 const createStreamFromBuffer = require(`../../util/buffer-to-stream`);
 
@@ -79,7 +80,6 @@ class OffersController {
 
   createOffer() {
     return async (req, res) => {
-      logger.info(`Create offer req.body: `, req.body);
 
       const source = {
         name: nameCheck(req.body.name, Data.NAMES),
@@ -137,13 +137,13 @@ class OffersController {
         }
 
         await this.model.createOffer(source);
-        res.send(source);
+        dataRenderer.renderDataSuccess(req, res, source);
 
       } catch (err) {
+        logger.info(`Create offer req.body: `, req.body);
         logger.error(`Create offer`, err);
 
-        res.status(400);
-        res.send(err);
+        dataRenderer.renderDataError(req, res, err);
       }
     };
   }
