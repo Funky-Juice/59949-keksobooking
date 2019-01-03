@@ -93,8 +93,8 @@ class OffersController {
         guests: stringToInt(req.body.guests),
         features: filterValues(req.body.features),
         description: req.body.description,
-        avatar: req.files.avatar,
-        photo: req.files.photo,
+        avatar: (req.files ? req.files.avatar : null),
+        photo: (req.files ? req.files.photo : null),
         date: new Date().getTime()
       };
 

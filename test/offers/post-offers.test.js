@@ -14,9 +14,11 @@ app.use(`/api/offers`, offersRouter(OffersModelMock, ImagesStoreMock));
 
 
 describe(`POST /api/offers`, function () {
+  // infinite checkout for files upload
+  this.timeout(0); // eslint-disable-line
 
   it(`should get json`, function () {
-    request(app)
+    return request(app)
         .post(`/api/offers`)
         .set(`Accept`, `application/json`)
         .send({
@@ -109,8 +111,6 @@ describe(`POST /api/offers`, function () {
   });
 
   describe(`"title" field`, function () {
-    // infinite checkout for files upload
-    this.timeout(0); // eslint-disable-line
 
     it(`should fail if field is missing`, function () {
       return request(app)
@@ -130,12 +130,12 @@ describe(`POST /api/offers`, function () {
           .attach(`avatar`, `test/img/keks.png`)
           .attach(`photo`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `title`,
-              errorMessage: `title is required`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `title`,
+                errorMessage: `title is required`
+              }]
+          );
     });
 
     it(`should fail if value is empty`, function () {
@@ -157,13 +157,13 @@ describe(`POST /api/offers`, function () {
           .attach(`avatar`, `test/img/keks.png`)
           .attach(`photo`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `title`,
-              fieldValue: ``,
-              errorMessage: `title must be between 30 and 140 characters`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `title`,
+                fieldValue: ``,
+                errorMessage: `title must be between 30 and 140 characters`
+              }]
+          );
     });
 
     it(`should fail if value is < 30 characters`, function () {
@@ -186,13 +186,13 @@ describe(`POST /api/offers`, function () {
           .attach(`avatar`, `test/img/keks.png`)
           .attach(`photo`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `title`,
-              fieldValue: string,
-              errorMessage: `title must be between 30 and 140 characters`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `title`,
+                fieldValue: string,
+                errorMessage: `title must be between 30 and 140 characters`
+              }]
+          );
     });
 
     it(`should fail if value is > 140 characters`, function () {
@@ -215,18 +215,17 @@ describe(`POST /api/offers`, function () {
           .attach(`avatar`, `test/img/keks.png`)
           .attach(`photo`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `title`,
-              fieldValue: string,
-              errorMessage: `title must be between 30 and 140 characters`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `title`,
+                fieldValue: string,
+                errorMessage: `title must be between 30 and 140 characters`
+              }]
+          );
     });
   });
 
   describe(`"type" field`, function () {
-    this.timeout(0); //eslint-disable-line
 
     it(`should fail if field is missing`, function () {
       return request(app)
@@ -244,12 +243,12 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `type`,
-              errorMessage: `type is required`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `type`,
+                errorMessage: `type is required`
+              }]
+          );
     });
 
     it(`should fail if value is empty`, function () {
@@ -269,13 +268,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `type`,
-              fieldValue: ``,
-              errorMessage: `type must be one of flat, palace, house, bungalo`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `type`,
+                fieldValue: ``,
+                errorMessage: `type must be one of flat, palace, house, bungalo`
+              }]
+          );
     });
 
     it(`should fail if value is invalid`, function () {
@@ -295,13 +294,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `type`,
-              fieldValue: `qwerty`,
-              errorMessage: `type must be one of flat, palace, house, bungalo`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `type`,
+                fieldValue: `qwerty`,
+                errorMessage: `type must be one of flat, palace, house, bungalo`
+              }]
+          );
     });
   });
 
@@ -323,12 +322,12 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `price`,
-              errorMessage: `price is required`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `price`,
+                errorMessage: `price is required`
+              }]
+          );
     });
 
     it(`should fail if value is empty`, function () {
@@ -348,20 +347,18 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [
-              {
-                fieldName: `price`,
-                fieldValue: ``,
-                errorMessage: `price is not a number`
-              },
-              {
-                fieldName: `price`,
-                fieldValue: ``,
-                errorMessage: `price must be between 1 and 100000 characters`
-              }
-            ]
-          });
+          .expect(400, [
+            {
+              fieldName: `price`,
+              fieldValue: ``,
+              errorMessage: `price is not a number`
+            },
+            {
+              fieldName: `price`,
+              fieldValue: ``,
+              errorMessage: `price must be between 1 and 100000 characters`
+            }]
+          );
     });
 
     it(`should fail if value is not a number`, function () {
@@ -381,13 +378,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `price`,
-              fieldValue: `qwerty`,
-              errorMessage: `price is not a number`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `price`,
+                fieldValue: `qwerty`,
+                errorMessage: `price is not a number`
+              }]
+          );
     });
 
     it(`should fail if value is invalid`, function () {
@@ -407,13 +404,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `price`,
-              fieldValue: `-30`,
-              errorMessage: `price must be between 1 and 100000`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `price`,
+                fieldValue: `-30`,
+                errorMessage: `price must be between 1 and 100000`
+              }]
+          );
     });
   });
 
@@ -435,12 +432,12 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `address`,
-              errorMessage: `address is required`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `address`,
+                errorMessage: `address is required`
+              }]
+          );
     });
 
     it(`should fail if address is empty`, function () {
@@ -460,13 +457,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `address`,
-              fieldValue: ``,
-              errorMessage: `address is required`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `address`,
+                fieldValue: ``,
+                errorMessage: `address is required`
+              }]
+          );
     });
 
     it(`should fail if address format is invalid`, function () {
@@ -486,13 +483,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `address`,
-              fieldValue: `Tokyo`,
-              errorMessage: `address format: xxx, yyy`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `address`,
+                fieldValue: `Tokyo`,
+                errorMessage: `address format: xxx, yyy`
+              }]
+          );
     });
 
     it(`should fail if address is not a numbers`, function () {
@@ -512,13 +509,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `address`,
-              fieldValue: `xxx, yyy`,
-              errorMessage: `values must be a numbers`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `address`,
+                fieldValue: `xxx, yyy`,
+                errorMessage: `values must be a numbers`
+              }]
+          );
     });
   });
 
@@ -540,12 +537,12 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `checkin`,
-              errorMessage: `time format should be HH:mm`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `checkin`,
+                errorMessage: `time format should be HH:mm`
+              }]
+          );
     });
 
     it(`should fail if value is empty`, function () {
@@ -565,13 +562,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `checkin`,
-              fieldValue: ``,
-              errorMessage: `time format should be HH:mm`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `checkin`,
+                fieldValue: ``,
+                errorMessage: `time format should be HH:mm`
+              }]
+          );
     });
 
     it(`should fail if value is invalid`, function () {
@@ -591,13 +588,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `checkin`,
-              fieldValue: `12-00`,
-              errorMessage: `time format should be HH:mm`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `checkin`,
+                fieldValue: `12-00`,
+                errorMessage: `time format should be HH:mm`
+              }]
+          );
     });
   });
 
@@ -619,12 +616,12 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `checkout`,
-              errorMessage: `time format should be HH:mm`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `checkout`,
+                errorMessage: `time format should be HH:mm`
+              }]
+          );
     });
 
     it(`should fail if value is empty`, function () {
@@ -644,13 +641,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `checkout`,
-              fieldValue: ``,
-              errorMessage: `time format should be HH:mm`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `checkout`,
+                fieldValue: ``,
+                errorMessage: `time format should be HH:mm`
+              }]
+          );
     });
 
     it(`should fail if value is invalid`, function () {
@@ -670,13 +667,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `checkout`,
-              fieldValue: `13-00`,
-              errorMessage: `time format should be HH:mm`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `checkout`,
+                fieldValue: `13-00`,
+                errorMessage: `time format should be HH:mm`
+              }]
+          );
     });
   });
 
@@ -698,12 +695,12 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `rooms`,
-              errorMessage: `rooms is required`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `rooms`,
+                errorMessage: `rooms is required`
+              }]
+          );
     });
 
     it(`should fail if value is empty`, function () {
@@ -723,9 +720,8 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [
-              {
+          .expect(400,
+              [{
                 fieldName: `rooms`,
                 fieldValue: ``,
                 errorMessage: `rooms is not a number`
@@ -734,9 +730,8 @@ describe(`POST /api/offers`, function () {
                 fieldName: `rooms`,
                 fieldValue: ``,
                 errorMessage: `rooms must be between 1 and 1000 characters`
-              }
-            ]
-          });
+              }]
+          );
     });
 
     it(`should fail if value is invalid`, function () {
@@ -756,13 +751,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `rooms`,
-              fieldValue: `-1`,
-              errorMessage: `rooms must be between 1 and 1000`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `rooms`,
+                fieldValue: `-1`,
+                errorMessage: `rooms must be between 1 and 1000`
+              }]
+          );
     });
   });
 
@@ -784,12 +779,12 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `guests`,
-              errorMessage: `guests is required`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `guests`,
+                errorMessage: `guests is required`
+              }]
+          );
     });
 
     it(`should fail if value is empty`, function () {
@@ -809,9 +804,8 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [
-              {
+          .expect(400,
+              [{
                 fieldName: `guests`,
                 fieldValue: ``,
                 errorMessage: `guests is not a number`
@@ -820,9 +814,8 @@ describe(`POST /api/offers`, function () {
                 fieldName: `guests`,
                 fieldValue: ``,
                 errorMessage: `guests must be between 1 and 10 characters`
-              }
-            ]
-          });
+              }]
+          );
     });
 
     it(`should fail if value is invalid`, function () {
@@ -842,13 +835,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `guests`,
-              fieldValue: `2000`,
-              errorMessage: `guests must be between 1 and 10`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `guests`,
+                fieldValue: `2000`,
+                errorMessage: `guests must be between 1 and 10`
+              }]
+          );
     });
   });
 
@@ -870,13 +863,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `qwerty`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `features`,
-              fieldValue: [`qwerty`],
-              errorMessage: `should contain only: wifi,dishwasher,parking,washer,elevator,conditioner`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `features`,
+                fieldValue: [`qwerty`],
+                errorMessage: `should contain only: wifi,dishwasher,parking,washer,elevator,conditioner`
+              }]
+          );
     });
   });
 
@@ -899,13 +892,13 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС. Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `description`,
-              fieldValue: `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС. Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`,
-              errorMessage: `description must be between 5 and 100 characters`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `description`,
+                fieldValue: `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС. Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`,
+                errorMessage: `description must be between 5 and 100 characters`
+              }]
+          );
     });
   });
 
@@ -930,13 +923,13 @@ describe(`POST /api/offers`, function () {
           .attach(`avatar`, `test/img/keks.png`)
           .attach(`avatar`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `avatar`,
-              fieldValue: 2,
-              errorMessage: `one file only`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `avatar`,
+                fieldValue: 2,
+                errorMessage: `one file only`
+              }]
+          );
     });
   });
 
@@ -963,13 +956,13 @@ describe(`POST /api/offers`, function () {
           .attach(`photo`, `test/img/keks.png`)
           .attach(`photo`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
-          .expect(400, {
-            errors: [{
-              fieldName: `photo`,
-              fieldValue: 4,
-              errorMessage: `three photos maximum`
-            }]
-          });
+          .expect(400,
+              [{
+                fieldName: `photo`,
+                fieldValue: 4,
+                errorMessage: `three photos maximum`
+              }]
+          );
     });
   });
 });
