@@ -1,5 +1,7 @@
 const Data = require(`../../data/data`);
+const logger = require(`../../logger`);
 const validate = require(`./validation`);
+const dataRenderer = require(`../../util/data-renderer`);
 const NotFoundError = require(`../error/not-found-error.js`);
 const createStreamFromBuffer = require(`../../util/buffer-to-stream`);
 
@@ -91,8 +93,8 @@ class OffersController {
         guests: stringToInt(req.body.guests),
         features: filterValues(req.body.features),
         description: req.body.description,
-        avatar: req.files.avatar,
-        photo: req.files.photo,
+        avatar: (req.files ? req.files.avatar : null),
+        photo: (req.files ? req.files.photo : null),
         date: new Date().getTime()
       };
 
@@ -135,13 +137,13 @@ class OffersController {
         }
 
         await this.model.createOffer(source);
-        res.send(source);
+        dataRenderer.renderDataSuccess(req, res, source);
 
       } catch (err) {
-        console.log(err);
+        logger.info(`Create offer req.body: `, req.body);
+        logger.error(`Create offer`, err);
 
-        res.status(400);
-        res.send(err);
+        dataRenderer.renderDataError(req, res, err);
       }
     };
   }
