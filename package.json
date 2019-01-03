@@ -6,7 +6,8 @@
   "scripts": {
     "test:lint": "eslint .",
     "test:mocha": "mocha --recursive",
-    "test": "npm run test:lint && npm run test:mocha"
+    "test": "npm run test:lint && npm run test:mocha",
+    "start": "node ./index --server"
   },
   "repository": {
     "type": "git",
