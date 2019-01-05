@@ -43,7 +43,7 @@ class OffersController {
       const reqDate = req.params.date;
       const offer = await this.model.getOfferByDate(stringToInt(reqDate));
 
-      if (!offer) {
+      if (!offer || !offer.avatar) {
         throw new NotFoundError(`Avatar was not found`);
       }
       const {info, stream} = await this.imageStore.getImage(offer.avatar);
@@ -61,15 +61,11 @@ class OffersController {
       const photoIndex = req.params.index;
       const offer = await this.model.getOfferByDate(stringToInt(reqDate));
 
-      if (!offer) {
+      if (!offer || !offer.photo) {
         throw new NotFoundError(`Photo was not found`);
       }
 
       const file = await this.imageStore.getImage(offer.photo[photoIndex]);
-
-      if (!file) {
-        throw new NotFoundError(`Photo was not found`);
-      }
 
       res.set(`content-type`, file.info.contentType);
       res.set(`content-length`, file.info.length);
