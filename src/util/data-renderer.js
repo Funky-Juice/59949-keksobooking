@@ -1,5 +1,6 @@
 const util = require(`util`);
 const {MongoError} = require(`mongodb`);
+const {MulterError} = require(`multer`);
 const ValidationError = require(`../server/error/validation-error`);
 
 const SUCCESS_CODE = 200;
@@ -74,6 +75,8 @@ module.exports = {
           data.code = 501;
           data.errorMessage = exception.message;
       }
+    } else if (exception instanceof MulterError) {
+      data.code = 400;
     }
     render(req, res, data, false);
   }

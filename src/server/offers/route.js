@@ -1,6 +1,7 @@
 const {Router} = require(`express`);
 const bodyParser = require(`body-parser`);
 const multer = require(`multer`);
+const logger = require(`../../logger`);
 const {asyncMiddleware} = require(`../../util/util`);
 const dataRenderer = require(`../../util/data-renderer`);
 
@@ -41,6 +42,7 @@ const initRouter = (model = OffersModel, imgStore = ImagesStore) => {
   offersRouter.post(``, upload.fields(formFields), asyncMiddleware(controller.createOffer()));
 
   offersRouter.use((exception, req, res, next) => {
+    logger.error(`Create offer`, exception);
     dataRenderer.renderDataError(req, res, exception);
     next();
   });
