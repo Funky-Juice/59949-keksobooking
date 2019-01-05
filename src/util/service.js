@@ -15,7 +15,7 @@ const formatOfferData = (obj) => {
       'checkout': obj.checkout,
       'features': obj.features,
       'description': obj.description,
-      'photo': obj.photo
+      'photos': obj.photos
     },
     'location': obj.location,
     'date': obj.date

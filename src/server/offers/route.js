@@ -33,7 +33,7 @@ const initRouter = (model = OffersModel, imgStore = ImagesStore) => {
 
   const formFields = [
     {name: `avatar`, maxCount: 1},
-    {name: `photo`, maxCount: 3}
+    {name: `photos`, maxCount: 3}
   ];
 
   offersRouter.get(``, asyncMiddleware(controller.getAll()));

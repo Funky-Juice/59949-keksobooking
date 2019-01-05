@@ -157,7 +157,7 @@
 
         <fieldset class="form__element">
           <label for="capacity">Количество мест</label>
-          <select id="capacity" name="capacity">
+          <select id="capacity" name="guests">
             <option value="3" selected>для 3 гостей</option>
             <option value="2">для 2 гостей</option>
             <option value="1">для 1 гостя</option>
@@ -196,7 +196,7 @@
           <label>Фотографии жилья</label>
           <div class="form__photo-container">
             <div class="upload">
-              <input type="file" id="images" multiple>
+              <input type="file" id="images" name="photos" multiple>
               <label for="images" class="drop-zone">Загрузите или&nbsp;перетащите сюда фото</label>
               <div class="upload__preview upload__preview--photos"></div>
             </div>

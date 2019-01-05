@@ -61,11 +61,11 @@ class OffersController {
       const photoIndex = req.params.index;
       const offer = await this.model.getOfferByDate(stringToInt(reqDate));
 
-      if (!offer || !offer.photo) {
+      if (!offer || !offer.photos) {
         throw new NotFoundError(`Photo was not found`);
       }
 
-      const file = await this.imageStore.getImage(offer.photo[photoIndex]);
+      const file = await this.imageStore.getImage(offer.photos[photoIndex]);
 
       res.set(`content-type`, file.info.contentType);
       res.set(`content-length`, file.info.length);
@@ -90,7 +90,7 @@ class OffersController {
         features: filterValues(req.body.features),
         description: req.body.description,
         avatar: (req.files ? req.files.avatar : null),
-        photo: (req.files ? req.files.photo : null),
+        photos: (req.files ? req.files.photos : null),
         date: new Date().getTime()
       };
 
@@ -116,10 +116,10 @@ class OffersController {
           source.avatar = avatarInfo.filename;
         }
 
-        if (source.photo) {
+        if (source.photos) {
           let photos = [];
 
-          source.photo.forEach(async (obj, i) => {
+          source.photos.forEach(async (obj, i) => {
             const photoInfo = {
               filename: `api/offers/${source.date}/photo/${i}`,
               mimetype: obj.mimetype
@@ -129,7 +129,7 @@ class OffersController {
                 .then(photos.push(photoInfo.filename));
           });
 
-          source.photo = photos;
+          source.photos = photos;
         }
 
         await this.model.createOffer(source);
