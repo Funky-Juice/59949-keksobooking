@@ -69,7 +69,7 @@ module.exports = {
       switch (exception.code) {
         case 11000:
           data.code = 400;
-          data.errorMessage = `Duplicate name field`;
+          data.errorMessage = `Offer with this name already exists`;
           break;
         default:
           data.code = 501;
