@@ -10,7 +10,12 @@ const OffersController = require(`./controller`);
 const ImagesStore = require(`../images/store`);
 const OffersModel = require(`./model`);
 
-const upload = multer({storage: multer.memoryStorage()});
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 1000000 // 1Mb
+  }
+});
 
 const offersRouter = new Router();
 
@@ -27,8 +32,8 @@ const initRouter = (model = OffersModel, imgStore = ImagesStore) => {
   const controller = new OffersController(model, imgStore);
 
   const formFields = [
-    {name: `avatar`},
-    {name: `photo`}
+    {name: `avatar`, maxCount: 1},
+    {name: `photo`, maxCount: 3}
   ];
 
   offersRouter.get(``, asyncMiddleware(controller.getAll()));
