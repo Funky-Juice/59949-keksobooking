@@ -232,7 +232,8 @@
       a = {
         flat: "Квартира",
         house: "Дом",
-        bungalo: "Бунгало"
+        bungalo: "Бунгало",
+        palace: "Дворец"
       },
       c = {
         singular: "комната",
