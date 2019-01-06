@@ -45,6 +45,9 @@ module.exports = {
     `Alex`,
     `Ulyana`,
     `Anastasyia`,
-    `Julia`
+    `Julia`,
+    `Maxim`,
+    `Valera`,
+    `Sergey`
   ]
 };
