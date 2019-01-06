@@ -960,5 +960,34 @@ describe(`POST /api/offers`, function () {
               }
           );
     });
+
+    it(`should fail if file is not an image`, function () {
+      return request(app)
+          .post(`/api/offers`)
+          .set(`Accept`, `multipart/form-data`)
+          .field(`name`, `Keks`)
+          .field(`title`, `Маленькая квартирка рядом с парком`)
+          .field(`type`, `flat`)
+          .field(`price`, `30000`)
+          .field(`address`, `127, 282`)
+          .field(`checkin`, `12:00`)
+          .field(`checkout`, `13:00`)
+          .field(`rooms`, `1`)
+          .field(`guests`, `1`)
+          .field(`features`, `dishwasher`)
+          .field(`features`, `conditioner`)
+          .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
+          .attach(`photos`, `test/img/test.pdf`)
+          .expect(`Content-Type`, /json/)
+          .expect(400,
+              {
+                name: `MulterError`,
+                message: `Only images are allowed`,
+                code: 400,
+                field: `photos`,
+                storageErrors: []
+              }
+          );
+    });
   });
 });
