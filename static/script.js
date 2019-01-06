@@ -58,7 +58,7 @@
   }
 }(),
   function() {
-    var e = ["gif", "jpg", "jpeg", "png"],
+    var e = ["gif", "jpg", "jpeg", "png", "JPG", "JPEG", "PNG"],
       n = ["dragover", "dragleave", "drop"],
       t = document.querySelectorAll(".upload input[type=file]"),
       o = document.querySelector(".notice__preview"),
