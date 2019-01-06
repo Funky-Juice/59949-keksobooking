@@ -127,8 +127,6 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `dishwasher`)
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
-          .attach(`avatar`, `test/img/keks.png`)
-          .attach(`photos`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
           .expect(400,
               [{
@@ -154,8 +152,6 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `dishwasher`)
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
-          .attach(`avatar`, `test/img/keks.png`)
-          .attach(`photos`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
           .expect(400,
               [{
@@ -183,8 +179,6 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `dishwasher`)
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
-          .attach(`avatar`, `test/img/keks.png`)
-          .attach(`photos`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
           .expect(400,
               [{
@@ -212,8 +206,6 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `dishwasher`)
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
-          .attach(`avatar`, `test/img/keks.png`)
-          .attach(`photos`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
           .expect(400,
               [{
