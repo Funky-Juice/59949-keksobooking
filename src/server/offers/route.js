@@ -12,6 +12,13 @@ const OffersModel = require(`./model`);
 
 const upload = multer({
   storage: multer.memoryStorage(),
+  fileFilter: (req, file, cb) => {
+    const ext = file.mimetype;
+    if (ext !== `image/png` && ext !== `image/jpg` && ext !== `image/jpeg`) {
+      return cb(new multer.MulterError(`Only images are allowed`, file.fieldname));
+    }
+    return cb(null, true);
+  },
   limits: {
     fileSize: 1000000 // 1Mb
   }

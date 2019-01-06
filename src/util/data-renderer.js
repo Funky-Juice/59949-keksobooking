@@ -76,6 +76,9 @@ module.exports = {
           data.errorMessage = exception.message;
       }
     } else if (exception instanceof MulterError) {
+      if (!data.message) {
+        data.message = data.code;
+      }
       data.code = 400;
     }
     render(req, res, data, false);

@@ -51,9 +51,9 @@ const descriptor = {
         }
       }
       cb();
-    },
-    avatar: {type: `isImage`, required: false},
-    photos: {type: `isImage`, required: false}
+    }
+    // avatar: {type: `isImage`, required: false},
+    // photos: {type: `isImage`, required: false}
   }
 };
 
