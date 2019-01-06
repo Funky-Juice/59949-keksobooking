@@ -19,7 +19,7 @@ const dataTemplate = () => {
     'checkout': util.getRandomFromArr(Data.TIME),
     'features': util.getRandomValuesFromArr(Data.FEATURES),
     'description': `Маленькая чистая квартира на краю парка.`,
-    'photo': util.getShuffledArray(Data.PHOTOS),
+    'photos': util.getShuffledArray(Data.PHOTOS),
     'location': {
       'x': coordinateX,
       'y': coordinateY

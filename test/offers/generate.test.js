@@ -275,22 +275,22 @@ describe(`JSON offer object check`, () => {
 
   describe(`offer.photos field check`, () => {
     it(`should exist`, () => {
-      assert.notEqual(typeof data.offer.photo, `undefined`);
+      assert.notEqual(typeof data.offer.photos, `undefined`);
     });
 
     it(`must be an array`, () => {
-      assert.equal(Array.isArray(data.offer.photo), true);
+      assert.equal(Array.isArray(data.offer.photos), true);
     });
 
     it(`should not be empty`, () => {
-      assert.notEqual(data.offer.photo.length, 0);
+      assert.notEqual(data.offer.photos.length, 0);
     });
 
     it(`must contain only photos`, () => {
       function comparison(elem) {
         return Data.PHOTOS.includes(elem);
       }
-      assert.equal(data.offer.photo.every(comparison), true);
+      assert.equal(data.offer.photos.every(comparison), true);
     });
   });
 });

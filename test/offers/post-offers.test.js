@@ -75,7 +75,7 @@ describe(`POST /api/offers`, function () {
         .field(`features`, `conditioner`)
         .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
         .attach(`avatar`, `test/img/keks.png`)
-        .attach(`photo`, `test/img/keks.png`)
+        .attach(`photos`, `test/img/keks.png`)
         .expect(`Content-Type`, /json/)
         .expect(200)
         .then((res) => {
@@ -99,7 +99,7 @@ describe(`POST /api/offers`, function () {
               y: 282
             },
             avatar: `api/offers/${data.date}/avatar`,
-            photo: [`api/offers/${data.date}/photo/0`]
+            photos: [`api/offers/${data.date}/photo/0`]
           });
         });
   });
@@ -128,7 +128,7 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .attach(`avatar`, `test/img/keks.png`)
-          .attach(`photo`, `test/img/keks.png`)
+          .attach(`photos`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
           .expect(400,
               [{
@@ -155,7 +155,7 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .attach(`avatar`, `test/img/keks.png`)
-          .attach(`photo`, `test/img/keks.png`)
+          .attach(`photos`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
           .expect(400,
               [{
@@ -184,7 +184,7 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .attach(`avatar`, `test/img/keks.png`)
-          .attach(`photo`, `test/img/keks.png`)
+          .attach(`photos`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
           .expect(400,
               [{
@@ -213,7 +213,7 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
           .attach(`avatar`, `test/img/keks.png`)
-          .attach(`photo`, `test/img/keks.png`)
+          .attach(`photos`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
           .expect(400,
               [{
@@ -896,7 +896,7 @@ describe(`POST /api/offers`, function () {
               [{
                 fieldName: `description`,
                 fieldValue: `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС. Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`,
-                errorMessage: `description must be between 5 and 100 characters`
+                errorMessage: `description cannot be longer than 100 characters`
               }]
           );
     });
@@ -924,16 +924,18 @@ describe(`POST /api/offers`, function () {
           .attach(`avatar`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
           .expect(400,
-              [{
-                fieldName: `avatar`,
-                fieldValue: 2,
-                errorMessage: `one file only`
-              }]
+              {
+                name: `MulterError`,
+                message: `Unexpected field`,
+                code: 400,
+                field: `avatar`,
+                storageErrors: []
+              }
           );
     });
   });
 
-  describe(`"photo" field`, function () {
+  describe(`"photos" field`, function () {
 
     it(`should fail if files > 3`, function () {
       return request(app)
@@ -951,17 +953,19 @@ describe(`POST /api/offers`, function () {
           .field(`features`, `dishwasher`)
           .field(`features`, `conditioner`)
           .field(`description`, `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`)
-          .attach(`photo`, `test/img/keks.png`)
-          .attach(`photo`, `test/img/keks.png`)
-          .attach(`photo`, `test/img/keks.png`)
-          .attach(`photo`, `test/img/keks.png`)
+          .attach(`photos`, `test/img/keks.png`)
+          .attach(`photos`, `test/img/keks.png`)
+          .attach(`photos`, `test/img/keks.png`)
+          .attach(`photos`, `test/img/keks.png`)
           .expect(`Content-Type`, /json/)
           .expect(400,
-              [{
-                fieldName: `photo`,
-                fieldValue: 4,
-                errorMessage: `three photos maximum`
-              }]
+              {
+                name: `MulterError`,
+                message: `Unexpected field`,
+                code: 400,
+                field: `photos`,
+                storageErrors: []
+              }
           );
     });
   });
