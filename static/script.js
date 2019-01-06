@@ -64,7 +64,6 @@
       o = document.querySelector(".notice__preview"),
       r = document.querySelector(".form__photo-container .upload__preview"),
       i = document.querySelectorAll(".drop-zone"),
-      a = 0,
       c = null,
       u = null,
       d = {
@@ -72,8 +71,9 @@
           l(e[0], o, !0)
         },
         images: function(e) {
-          Array.prototype.forEach.call(e, function(e) {
-            ++a <= 8 ? l(e, r) : window.showAlert("Превышено максимальное количество фотографий: 8", "error")
+          Array.prototype.forEach.call(e, function(i) {
+            for (; r.firstChild;) r.removeChild(r.firstChild);
+            e.length <= 3 ? l(i, r) : window.showAlert("Превышено максимальное количество фотографий: 3", "error")
           })
         }
       },
@@ -269,9 +269,9 @@
         var i = e.author;
         return t.querySelector(".popup__avatar").src = i.avatar || "img/avatars/default.png", e.offer.features.forEach(function(e) {
           o.appendChild(l(e))
-        }), e.offer.photos.forEach(function(e) {
+        }), e.offer.photos ? e.offer.photos.forEach(function(e) {
           r.appendChild(s(e))
-        }), n.addEventListener("click", function() {
+        }) : null, n.addEventListener("click", function() {
           d()
         }), t
       },
