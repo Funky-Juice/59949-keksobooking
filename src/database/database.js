@@ -5,7 +5,7 @@ const url = process.env.DB_HOST || `mongodb://127.0.0.1:27017`;
 
 const connectDB = MongoClient.connect(url)
     .then((client) => {
-      return client.db(`booking`);
+      return client.db(`keksobooking`);
     })
     .catch((err) => {
       logger.error(`Failed to connect to MongoDB`, err);
