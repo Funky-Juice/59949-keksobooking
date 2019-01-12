@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "name": "keksobooking",
+  "builds": [
+    { "src": "static/**", "use": "@now/static" },
+    { "src": "index.js", "use": "@now/node-server" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "static/index.html" },
+    { "src": "/api/(.*)", "dest": "index.js" }
+  ],
+  "env": {
+    "DB_HOST": "mongodb+srv://***mongopath***/",
+    "SERVER_PORT": "3000",
+    "SERVER_LOG_LEVEL": "INFO",
+    "NODE_ENV": "production"
+  }
+}

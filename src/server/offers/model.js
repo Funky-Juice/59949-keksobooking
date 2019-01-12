@@ -5,7 +5,7 @@ const setupCollection = async () => {
   const dBase = await db;
 
   const collection = dBase.collection(`offers`);
-  collection.createIndex({name: -1}, {unique: true});
+  collection.createIndex({name: -1}, {unique: false});
 
   return collection;
 };
