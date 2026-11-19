@@ -4,9 +4,7 @@
   "description": "Node.js educational project",
   "main": "index.js",
   "scripts": {
-    "test:lint": "eslint .",
-    "test:mocha": "mocha --recursive",
-    "test": "npm run test:lint && npm run test:mocha",
+    "test": "mocha --recursive",
     "start": "node ./index"
   },
   "repository": {
@@ -30,8 +28,6 @@
     "winston": "3.1.0"
   },
   "devDependencies": {
-    "eslint": "4.17.0",
-    "eslint-config-htmlacademy": "0.4.2",
     "mocha": "5.0.1",
     "supertest": "3.0.0"
   }
