@@ -790,3 +790,41 @@ textarea:focus {
 .footer-social-item-vk {
   background-position: -10px -10px;
 }
+
+.alert-box {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 50%;
+
+  margin: 0;
+  padding: 15px 25px;
+
+  transform: translate(-50%, 0);
+  animation: alert-box-slide .3s ease;
+
+  text-align: center;
+
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+}
+
+.alert-box--error {
+  color: #fff;
+  background-color: #ff6d51;
+}
+
+.alert-box--success {
+  color: #fff;
+  background-color: #4caf50;
+}
+
+@keyframes alert-box-slide {
+  from {
+    transform: translate(-50%, -100%);
+  }
+
+  to {
+    transform: translate(-50%, 0);
+  }
+}
