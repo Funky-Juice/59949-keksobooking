@@ -1,34 +1,44 @@
-const db = require(`../../database/database`);
+const getDb = require(`../../database/database`);
 const logger = require(`../../logger`);
 
 const setupCollection = async () => {
-  const dBase = await db;
-
+  const dBase = await getDb();
   const collection = dBase.collection(`offers`);
-  collection.createIndex({name: -1}, {unique: false});
-
+  await collection.createIndex({name: -1}, {unique: false});
   return collection;
 };
 
 class OffersModel {
-  constructor(collection) {
-    this.collection = collection;
+  constructor() {
+    this.collection = null;
+  }
+
+  getCollection() {
+    if (!this.collection) {
+      this.collection = setupCollection().catch((err) => {
+        this.collection = null;
+        logger.error(`"Offers" collection error: ` + err);
+        throw err;
+      });
+    }
+
+    return this.collection;
   }
 
   async getAllOffers() {
-    return (await this.collection).find();
+    const collection = await this.getCollection();
+    const cursor = collection.find();
+    cursor.count = () => collection.countDocuments();
+    return cursor;
   }
 
   async getOfferByDate(createDate) {
-    return (await this.collection).findOne({date: createDate});
+    return (await this.getCollection()).findOne({date: createDate});
   }
 
   async createOffer(offer) {
-    return (await this.collection).insertOne(offer);
+    return (await this.getCollection()).insertOne(offer);
   }
 }
 
-module.exports = new OffersModel(setupCollection().catch((err) => {
-  logger.error(`"Offers" collection error: ` + err);
-  process.exit(1);
-}));
+module.exports = new OffersModel();

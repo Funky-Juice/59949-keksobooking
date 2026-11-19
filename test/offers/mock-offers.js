@@ -3,20 +3,21 @@ const {generateEntity} = require(`./generator`);
 const offers = generateEntity();
 
 class Cursor {
-  constructor(data) {
+  constructor(data, total = data.length) {
     this.data = data;
+    this.total = total;
   }
 
   skip(count) {
-    return new Cursor(this.data.slice(count));
+    return new Cursor(this.data.slice(count), this.total);
   }
 
   limit(count) {
-    return new Cursor(this.data.slice(0, count));
+    return new Cursor(this.data.slice(0, count), this.total);
   }
 
   async count() {
-    return this.data.length;
+    return this.total;
   }
 
   async toArray() {

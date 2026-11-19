@@ -1,6 +1,7 @@
 const express = require(`express`);
 const offersRouter = require(`./offers/route`);
 const logger = require(`../logger`);
+const getDb = require(`../database/database`);
 
 const app = express();
 
@@ -16,9 +17,15 @@ module.exports = {
   name: `server`,
   description: `runs local server`,
   execute(port) {
-    app.listen(port || PORT, HOSTNAME, () => {
-      logger.info(`server started at http://${HOSTNAME}:${port || PORT}/`);
-    });
+    getDb()
+        .then(() => {
+          app.listen(port || PORT, HOSTNAME, () => {
+            logger.info(`server started at http://${HOSTNAME}:${port || PORT}/`);
+          });
+        })
+        .catch(() => {
+          process.exit(1);
+        });
   },
   app
 };

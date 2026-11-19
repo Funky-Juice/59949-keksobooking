@@ -1,15 +1,29 @@
 const {MongoClient} = require(`mongodb`);
 const logger = require(`../logger`);
 
-const url = process.env.DB_HOST || `mongodb://127.0.0.1:27017`;
+const DB_NAME = `keksobooking`;
 
-const connectDB = MongoClient.connect(url)
-    .then((client) => {
-      return client.db(`keksobooking`);
-    })
-    .catch((err) => {
-      logger.error(`Failed to connect to MongoDB`, err);
-      process.exit(1);
-    });
+let client = null;
+let connection = null;
 
-module.exports = connectDB;
+const getDb = () => {
+  if (connection) {
+    return connection;
+  }
+
+  const url = process.env.DB_HOST || `mongodb://127.0.0.1:27017`;
+  client = new MongoClient(url);
+
+  connection = client.connect()
+      .then(() => client.db(DB_NAME))
+      .catch((err) => {
+        connection = null;
+        client = null;
+        logger.error(`Failed to connect to MongoDB`, err);
+        throw err;
+      });
+
+  return connection;
+};
+
+module.exports = getDb;
