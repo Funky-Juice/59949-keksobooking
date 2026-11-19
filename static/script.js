@@ -160,7 +160,14 @@
       a = function(e, t) {
         var n = new XMLHttpRequest;
         return n.timeout = 15e3, n.responseType = "json", n.addEventListener("load", function() {
-          n.status === o ? e(n.response) : t()
+          n.status === o ? e(n.response) : t(function(e) {
+            if (!e) return "";
+            if (e.message) return e.message;
+            if (e.errorMessage) return e.errorMessage;
+            return Array.isArray(e) ? e.map(function(e) {
+              return e && e.errorMessage || ""
+            }).filter(Boolean).join("; ") : ""
+          }(n.response))
         }), n.addEventListener("error", function() {
           t("Произошла ошибка соединения.")
         }), n.addEventListener("timeout", function() {
@@ -345,7 +352,7 @@
         window.showAlert("Данные успешно отправлены!", "success"), p(), window.map.deactivate()
       },
       _ = function(e) {
-        e ? window.showAlert(e, "error") : window.showAlert("Ошибка сервера. Попробуйте отправить данные позже.", "error")
+        e || (e = "Ошибка сервера. Попробуйте отправить данные позже."), window.showAlert("Ошибка: " + e, "error")
       };
     t.addEventListener("submit", function(e) {
       window.backend.upload(new FormData(t), S, _), e.preventDefault()
