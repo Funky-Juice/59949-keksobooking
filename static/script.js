@@ -349,7 +349,7 @@
         e.preventDefault(), p(), window.map.deactivate()
       },
       S = function() {
-        window.showAlert("Данные успешно отправлены!", "success"), p(), window.map.deactivate()
+        window.showAlert("Данные успешно отправлены!", "success"), p(), window.map.deactivate(), window.map.loadOffers()
       },
       _ = function(e) {
         e || (e = "Ошибка сервера. Попробуйте отправить данные позже."), window.showAlert("Ошибка: " + e, "error")
@@ -374,6 +374,7 @@
       l = 62,
       s = 18,
       f = !1,
+      a = !1,
       e = document.querySelector(".map"),
       p = e.querySelector(".map__pin--main"),
       m = e.querySelector(".map__pins"),
@@ -406,15 +407,19 @@
           var e = window.filter.apply(c);
           e.length || window.showAlert("Не найдено похожих объявлений. Измените настройки фильтра.", "error"), window.card.close(), window.pins.add(e, m)
         })
+      },
+      n = function() {
+        window.backend.download(function(e) {
+          c = e.data || e, a || (p.addEventListener("mousedown", t), a = !0), f && window.pins.add(window.filter.apply(c), m)
+        }, function(e) {
+          window.showAlert(e, "error")
+        })
       };
-    window.backend.download(function(e) {
-      c = e.data || e, p.addEventListener("mousedown", t)
-    }, function(e) {
-      window.showAlert(e, "error")
-    }), window.form.setLocation(p.offsetLeft, p.offsetTop), window.map = {
+    n(), window.form.setLocation(p.offsetLeft, p.offsetTop), window.map = {
       element: e,
       deactivate: function() {
         window.card.close(), window.pins.remove(m), e.classList.add("map--faded"), p.style = "", f = !1, window.form.deactivate(), window.uploadPhoto.clear(), window.filter.reset(), window.form.setLocation(p.offsetLeft, p.offsetTop), window.filter.element.removeEventListener("change", w)
-      }
+      },
+      loadOffers: n
     }
   }();
