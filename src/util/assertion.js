@@ -20,9 +20,9 @@ module.exports = function () {
           this.value = fileExt;
           this.raise(`should be jpeg or png image`);
         }
-        if (fileSize > 1000000) {
-          this.value = (fileSize / 1000000).toFixed(1) + `Mb`;
-          this.raise(`size should be less then 1Mb`);
+        if (fileSize > 5 * 1024 * 1024) {
+          this.value = (fileSize / (1024 * 1024)).toFixed(1) + `Mb`;
+          this.raise(`size should be less then 5Mb`);
         }
       });
     }
