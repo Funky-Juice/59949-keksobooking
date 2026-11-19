@@ -399,7 +399,7 @@ describe(`POST /api/offers`, function () {
           .expect(400,
               [{
                 fieldName: `price`,
-                fieldValue: `-30`,
+                fieldValue: -30,
                 errorMessage: `price must be between 1 and 100000`
               }]
           );
@@ -746,7 +746,7 @@ describe(`POST /api/offers`, function () {
           .expect(400,
               [{
                 fieldName: `rooms`,
-                fieldValue: `-1`,
+                fieldValue: -1,
                 errorMessage: `rooms must be between 1 and 1000`
               }]
           );
@@ -830,7 +830,7 @@ describe(`POST /api/offers`, function () {
           .expect(400,
               [{
                 fieldName: `guests`,
-                fieldValue: `2000`,
+                fieldValue: 2000,
                 errorMessage: `guests must be between 1 and 10`
               }]
           );

@@ -45,7 +45,7 @@ ${util.inspect(form)}
 };
 
 const render = (req, res, data, success) => {
-  const badStatusCode = data.code ? data.code : BAD_DATA_CODE;
+  const badStatusCode = Number.isInteger(data.code) ? data.code : BAD_DATA_CODE;
   res.status(success ? SUCCESS_CODE : badStatusCode);
   switch (req.accepts([`json`, `html`])) {
     case `html`:
@@ -76,8 +76,15 @@ module.exports = {
           data.errorMessage = exception.message;
       }
     } else if (exception instanceof MulterError) {
-      if (!data.message) {
+      const unknownMessage = `Unknown error: ${data.code}`;
+      if (!data.message || data.message === unknownMessage) {
         data.message = data.code;
+      } else if (data.message === `Unexpected file field`) {
+        data.message = `Unexpected field`;
+      }
+      delete data.filename;
+      if (!Array.isArray(data.storageErrors)) {
+        data.storageErrors = [];
       }
       data.code = 400;
     }

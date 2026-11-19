@@ -55,8 +55,11 @@ const initRouter = (model = OffersModel, imgStore = ImagesStore) => {
 
   offersRouter.use((exception, req, res, next) => {
     logger.error(`Create offer`, exception);
+    if (res.headersSent) {
+      next(exception);
+      return;
+    }
     dataRenderer.renderDataError(req, res, exception);
-    next();
   });
 
   return offersRouter;
