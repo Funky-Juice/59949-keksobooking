@@ -27,7 +27,7 @@ const descriptor = {
       }
       cb();
     },
-    description: {type: `string`, required: false, max: 100},
+    description: {type: `string`, required: false, max: 200},
     checkin: {
       type: `string`,
       required: true,
